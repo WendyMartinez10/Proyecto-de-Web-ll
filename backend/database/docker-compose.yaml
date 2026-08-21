@@ -6,7 +6,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: marcas_equipos
+      MYSQL_DATABASE: UTN_Marcas_y_Registros
     ports:
       - "3307:3306"
     volumes:
