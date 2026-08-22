@@ -220,3 +220,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,visualstudiocode,node
+
+# Imágenes subidas por los usuarios (no se versionan, pero se mantiene la carpeta)
+uploads/equipos/*
+!uploads/equipos/.gitkeep
