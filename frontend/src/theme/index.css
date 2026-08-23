@@ -1,0 +1,396 @@
+:root {
+  /* ============================================
+     PALETA DE COLORES
+     ============================================ */
+
+  --primary: #0F766E;
+  --primary-hover: #115E59;
+
+  --secondary: #0891B2;
+
+  --accent: #0F766E;
+  --accent-bg: #CCFBF1;
+  --accent-border: #5EEAD4;
+
+  --bg-gradient-start: #F0FDFA;
+  --bg-gradient-end: #E0F2FE;
+
+  --text-main: #172033;
+  --text-muted: #526174;
+  --text-h: #0F172A;
+
+  --border: #CBD5E1;
+
+  --surface: rgba(255, 255, 255, 0.90);
+  --surface-border: rgba(255, 255, 255, 0.55);
+
+  --social-bg: #F1F5F9;
+
+  /* ============================================
+     FUENTES
+     ============================================ */
+
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+
+  --font-display: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', sans-serif;
+
+  /* ============================================
+     SOMBRAS
+     ============================================ */
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+
+  --shadow-md: 0 5px 10px rgba(15, 23, 42, 0.10),
+    0 2px 4px rgba(15, 23, 42, 0.06);
+
+  --shadow-lg: 0 12px 20px rgba(15, 23, 42, 0.10),
+    0 4px 8px rgba(15, 23, 42, 0.06);
+
+  --shadow-xl: 0 22px 30px rgba(15, 23, 42, 0.12),
+    0 10px 12px rgba(15, 23, 42, 0.06);
+
+  --shadow-glow: 0 0 18px rgba(15, 118, 110, 0.25);
+
+  /* ============================================
+     TRANSICIÓN
+     ============================================ */
+
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ============================================
+   CONFIGURACIÓN GENERAL
+   ============================================ */
+
+body {
+  margin: 0;
+
+  font-family: var(--font-sans);
+
+  font-size: 17px;
+
+  line-height: 1.6;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--bg-gradient-start) 0%,
+      var(--bg-gradient-end) 100%
+    );
+
+  background-attachment: fixed;
+
+  color: var(--text-main);
+
+  min-height: 100vh;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* ============================================
+   TIPOGRAFÍA
+   ============================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.navbar-brand {
+  font-family: var(--font-display);
+
+  font-weight: 700;
+
+  letter-spacing: -0.025em;
+
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.6rem;
+}
+
+p {
+  font-size: 17px;
+
+  line-height: 1.7;
+
+  color: var(--text-main);
+}
+
+
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+
+.glass-panel {
+  background: var(--surface);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid var(--surface-border);
+
+  box-shadow: var(--shadow-lg);
+
+  border-radius: 1rem;
+}
+
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.82) !important;
+
+  backdrop-filter: blur(16px);
+
+  -webkit-backdrop-filter: blur(16px);
+
+  border-bottom: 1px solid rgba(203, 213, 225, 0.65);
+
+  box-shadow: var(--shadow-sm);
+
+  padding-top: 1rem;
+
+  padding-bottom: 1rem;
+
+  transition: var(--transition);
+}
+
+.navbar-brand {
+  background:
+    linear-gradient(
+      to right,
+      var(--primary),
+      var(--secondary)
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+
+  font-size: 1.65rem;
+
+  font-weight: 800;
+}
+
+
+/* ============================================
+   BOTONES
+   ============================================ */
+
+.btn-premium {
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  color: white;
+
+  border: none;
+
+  font-family: var(--font-sans);
+
+  font-size: 17px;
+
+  font-weight: 600;
+
+  padding: 0.85rem 2.2rem;
+
+  border-radius: 50rem;
+
+  box-shadow: var(--shadow-md);
+
+  transition: var(--transition);
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    var(--shadow-lg),
+    var(--shadow-glow);
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary-hover),
+      var(--secondary)
+    );
+}
+
+.btn-premium:active {
+  transform: translateY(1px);
+}
+
+.btn-premium-large {
+  font-size: 1.3rem;
+
+  padding: 1.05rem 3rem;
+}
+
+
+/* ============================================
+   INPUTS Y FORMULARIOS
+   ============================================ */
+
+.form-control-glass {
+  background: rgba(255, 255, 255, 0.95);
+
+  border: 1px solid #CBD5E1;
+
+  border-radius: 0.75rem;
+
+  padding: 0.85rem 1rem;
+
+  transition: var(--transition);
+
+  font-family: var(--font-sans);
+
+  font-size: 17px;
+
+  color: var(--text-main);
+}
+
+.form-control-glass::placeholder {
+  color: var(--text-muted);
+
+  opacity: 0.9;
+}
+
+.form-control-glass:focus {
+  background: #FFFFFF;
+
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 4px rgba(15, 118, 110, 0.12);
+
+  outline: none;
+}
+
+
+/* ============================================
+   CARDS
+   ============================================ */
+
+.card-animated {
+  transition: var(--transition);
+
+  border: none;
+}
+
+.card-animated:hover {
+  transform: translateY(-5px);
+
+  box-shadow: var(--shadow-xl);
+}
+
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation:
+    fadeInUp
+    0.6s
+    cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+}
+
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+
+.hero-gradient-text {
+  background:
+    linear-gradient(
+      to right,
+      #0F172A,
+      var(--primary),
+      var(--secondary)
+    );
+
+  -webkit-background-clip: text;
+
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  .navbar-brand {
+    font-size: 1.4rem;
+  }
+}

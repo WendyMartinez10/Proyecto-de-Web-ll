@@ -8,6 +8,7 @@ const pool = mysql.createPool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    charset: 'utf8mb4',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -28,8 +29,6 @@ export const checkDbConnection = async () => {
     } catch (error) {
         console.error('No fue posible conectar a la base de datos.');
         console.error(`   Motivo: ${error.message}`);
-        console.error('   Verifica que el contenedor de MySQL (docker-compose) esté corriendo y que las variables de entorno en .env sean correctas.');
-        return false;
     }
 };
 

@@ -1,0 +1,3 @@
+Carpeta reservada para imágenes o assets estáticos que se importen desde
+el código (íconos propios, logos, etc.). Actualmente el proyecto usa
+Bootstrap Icons para toda la iconografía, así que no hay assets propios.

@@ -23,41 +23,57 @@ export const getConfigIpRange = async () => {
 };
 
 export const getReporte = async (filtros) => {
-    // Se consolida una fila por usuario/fecha con la hora de entrada y de
-    // salida, tal como lo pide la guía (usuario, fecha, hora de entrada,
-    // hora de salida, dispositivo, IP).
+    // Cada fila representa un "turno": una entrada y, si existe, su salida
+    // correspondiente. Un mismo día puede tener varios turnos (ej. entrada
+    // de la mañana + salida a almorzar + entrada de la tarde + salida final),
+    // ya que la guía solo prohíbe dos entradas seguidas sin salida, no
+    // limita a un único ciclo por día.
     let query = `
+        WITH marcas_turno AS (
+            SELECT
+                m.id,
+                m.usuario_id,
+                m.fecha,
+                m.hora,
+                m.tipo,
+                m.ip,
+                m.dispositivo_id,
+                SUM(CASE WHEN m.tipo = 'entrada' THEN 1 ELSE 0 END)
+                    OVER (PARTITION BY m.usuario_id, m.fecha ORDER BY m.hora, m.id) AS turno
+            FROM marcas m
+        )
         SELECT
             u.id as usuario_id,
             u.nombre_completo as usuario,
-            m.fecha,
-            MAX(CASE WHEN m.tipo = 'entrada' THEN m.hora END) as hora_entrada,
-            MAX(CASE WHEN m.tipo = 'salida' THEN m.hora END) as hora_salida,
-            MAX(CASE WHEN m.tipo = 'entrada' THEN d.nombre END) as dispositivo_entrada,
-            MAX(CASE WHEN m.tipo = 'salida' THEN d.nombre END) as dispositivo_salida,
-            MAX(CASE WHEN m.tipo = 'entrada' THEN m.ip END) as ip_entrada,
-            MAX(CASE WHEN m.tipo = 'salida' THEN m.ip END) as ip_salida
-        FROM marcas m
-        JOIN usuarios u ON m.usuario_id = u.id
-        LEFT JOIN dispositivos d ON m.dispositivo_id = d.id
+            mt.fecha,
+            mt.turno,
+            MAX(CASE WHEN mt.tipo = 'entrada' THEN mt.hora END) as hora_entrada,
+            MAX(CASE WHEN mt.tipo = 'salida' THEN mt.hora END) as hora_salida,
+            MAX(CASE WHEN mt.tipo = 'entrada' THEN d.nombre END) as dispositivo_entrada,
+            MAX(CASE WHEN mt.tipo = 'salida' THEN d.nombre END) as dispositivo_salida,
+            MAX(CASE WHEN mt.tipo = 'entrada' THEN mt.ip END) as ip_entrada,
+            MAX(CASE WHEN mt.tipo = 'salida' THEN mt.ip END) as ip_salida
+        FROM marcas_turno mt
+        JOIN usuarios u ON mt.usuario_id = u.id
+        LEFT JOIN dispositivos d ON mt.dispositivo_id = d.id
         WHERE 1=1
     `;
     const params = [];
 
     if (filtros.usuario) {
-        query += ' AND m.usuario_id = ?';
+        query += ' AND mt.usuario_id = ?';
         params.push(filtros.usuario);
     }
     if (filtros.anio) {
-        query += ' AND YEAR(m.fecha) = ?';
+        query += ' AND YEAR(mt.fecha) = ?';
         params.push(filtros.anio);
     }
     if (filtros.mes) {
-        query += ' AND MONTH(m.fecha) = ?';
+        query += ' AND MONTH(mt.fecha) = ?';
         params.push(filtros.mes);
     }
     if (filtros.dia) {
-        query += ' AND DAY(m.fecha) = ?';
+        query += ' AND DAY(mt.fecha) = ?';
         params.push(filtros.dia);
     }
     if (filtros.departamento) {
@@ -65,7 +81,7 @@ export const getReporte = async (filtros) => {
         params.push(filtros.departamento);
     }
 
-    query += ' GROUP BY u.id, u.nombre_completo, m.fecha ORDER BY m.fecha DESC, u.nombre_completo ASC';
+    query += ' GROUP BY u.id, u.nombre_completo, mt.fecha, mt.turno ORDER BY mt.fecha DESC, mt.turno ASC, u.nombre_completo ASC';
 
     const [rows] = await pool.query(query, params);
     return rows;

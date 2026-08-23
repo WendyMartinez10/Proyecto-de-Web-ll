@@ -1,0 +1,8 @@
+/*
+ * Estilos específicos del módulo "dispositivos".
+ * El sistema de diseño global (paleta, tipografía, componentes glass-panel,
+ * btn-premium, etc.) vive en src/theme/index.css. Este archivo queda
+ * reservado para reglas CSS que apliquen únicamente a las pantallas de
+ * este módulo, si en el futuro se necesitan. Actualmente no hay ninguna
+ * regla propia: todo el módulo usa las clases del tema global.
+ */
