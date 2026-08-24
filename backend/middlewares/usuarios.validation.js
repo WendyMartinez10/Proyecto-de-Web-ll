@@ -30,8 +30,10 @@ export const registerValidator = [
         .isLength({ max: 150 }).withMessage('El correo no puede superar los 150 caracteres')
         .normalizeEmail(),
     check('departamento_id')
-        .optional({ checkFalsy: true })
-        .isInt({ min: 1 }).withMessage('El departamento seleccionado no es válido'),
+    .notEmpty()
+    .withMessage('El departamento es obligatorio')
+    .isInt({ min: 1 })
+    .withMessage('El departamento no es válido'),
     check('nombre_usuario')
         .notEmpty().withMessage('El usuario es requerido')
         .isLength({ min: 4, max: 50 }).withMessage('El usuario debe tener entre 4 y 50 caracteres')

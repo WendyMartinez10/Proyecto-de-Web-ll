@@ -92,8 +92,46 @@ export const Inventario = () => {
                                     </span>
                                 </td>
                                 <td className="px-4 text-end">
-                                    <button className="btn btn-sm btn-light text-primary me-2 shadow-sm rounded-circle" style={{width:'32px', height:'32px'}} onClick={() => handleEdit(eq)} title="Editar"><i className="bi bi-pencil"></i></button>
-                                    <button className="btn btn-sm btn-light text-danger shadow-sm rounded-circle" style={{width:'32px', height:'32px'}} onClick={() => handleDelete(eq.id)} title="Eliminar"><i className="bi bi-trash"></i></button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-light text-primary me-2 shadow-sm rounded-circle"
+                                        style={{
+                                            width: '32px',
+                                            height: '32px'
+                                        }}
+                                        onClick={() => handleEdit(eq)}
+                                        disabled={eq.estado === 'prestado'}
+                                        title={
+                                            eq.estado === 'prestado'
+                                                ? 'No se puede editar un equipo prestado'
+                                                : 'Editar'
+                                        }
+                                    >
+                                        <i className="bi bi-pencil"></i>
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm btn-light text-danger shadow-sm rounded-circle"
+                                        style={{
+                                            width: '32px',
+                                            height: '32px'
+                                        }}
+                                        onClick={() => handleDelete(eq.id)}
+                                        disabled={
+                                            eq.estado === 'prestado' ||
+                                            eq.estado === 'mantenimiento'
+                                        }
+                                        title={
+                                            eq.estado === 'prestado'
+                                                ? 'No se puede eliminar un equipo prestado'
+                                                : eq.estado === 'mantenimiento'
+                                                    ? 'No se puede eliminar un equipo en mantenimiento'
+                                                    : 'Eliminar'
+                                        }
+                                    >
+                                        <i className="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

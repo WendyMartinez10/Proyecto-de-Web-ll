@@ -86,3 +86,72 @@ export const getReporte = async (filtros) => {
     const [rows] = await pool.query(query, params);
     return rows;
 };
+
+export const registrarMarcaTransaccional = async (data) => {
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        const {
+            usuario_id,
+            fecha,
+            hora,
+            ip,
+            dispositivo_id
+        } = data;
+
+        // Bloquea temporalmente el registro del usuario para evitar
+        // que dos solicitudes simultáneas calculen el mismo tipo de marca.
+        await connection.query(
+            `SELECT id
+             FROM usuarios
+             WHERE id = ?
+             FOR UPDATE`,
+            [usuario_id]
+        );
+
+        const [rows] = await connection.query(
+            `SELECT tipo
+             FROM marcas
+             WHERE usuario_id = ?
+               AND fecha = ?
+             ORDER BY hora DESC, id DESC
+             LIMIT 1
+             FOR UPDATE`,
+            [usuario_id, fecha]
+        );
+
+        let tipo = 'entrada';
+
+        if (rows.length > 0 && rows[0].tipo === 'entrada') {
+            tipo = 'salida';
+        }
+
+        const [result] = await connection.query(
+            `INSERT INTO marcas
+                (usuario_id, fecha, hora, tipo, ip, dispositivo_id)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [
+                usuario_id,
+                fecha,
+                hora,
+                tipo,
+                ip,
+                dispositivo_id
+            ]
+        );
+
+        await connection.commit();
+
+        return {
+            id: result.insertId,
+            tipo
+        };
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release();
+    }
+};

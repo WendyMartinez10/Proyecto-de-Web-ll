@@ -8,42 +8,68 @@ import { toReporteMarcas } from '../dtos/marca.dto.js';
  * Registra una marca de entrada o salida. El tipo se determina
  * automáticamente según la última marca del usuario en la fecha actual.
  */
-export const registrar = async ({ usuarioId, ip, identificadorDispositivo }) => {
+export const registrar = async ({
+    usuarioId,
+    ip,
+    identificadorDispositivo
+}) => {
     const rango = await marcasModel.getConfigIpRange();
+
     if (rango !== '0.0.0.0/0' && !ipRangeCheck(ip, rango)) {
-        throw new AppError('No es posible realizar la marca desde la red actual', 403);
+        throw new AppError(
+            'No es posible realizar la marca desde la red actual',
+            403
+        );
     }
 
     if (!identificadorDispositivo) {
-        throw new AppError('Dispositivo no registrado o no autorizado', 403);
+        throw new AppError(
+            'Dispositivo no registrado o no autorizado',
+            403
+        );
     }
 
-    const dispositivo = await dispositivosModel.findByIdentificador(identificadorDispositivo);
-    if (!dispositivo || dispositivo.usuario_id !== usuarioId || dispositivo.estado !== 'activo') {
-        throw new AppError('Dispositivo no autorizado o inactivo', 403);
+    const dispositivo =
+        await dispositivosModel.findByIdentificador(
+            identificadorDispositivo
+        );
+
+    if (
+        !dispositivo ||
+        dispositivo.usuario_id !== usuarioId ||
+        dispositivo.estado !== 'activo'
+    ) {
+        throw new AppError(
+            'Dispositivo no autorizado o inactivo',
+            403
+        );
     }
 
     const now = new Date();
-    const fecha = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
-    const hora = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
 
-    const ultimaMarca = await marcasModel.getLastMarcaByDate(usuarioId, fecha);
+    const fecha =
+        now.getFullYear() +
+        '-' +
+        String(now.getMonth() + 1).padStart(2, '0') +
+        '-' +
+        String(now.getDate()).padStart(2, '0');
 
-    let tipo = 'entrada';
-    if (ultimaMarca && ultimaMarca.tipo === 'entrada') {
-        tipo = 'salida';
-    }
+    const hora =
+        String(now.getHours()).padStart(2, '0') +
+        ':' +
+        String(now.getMinutes()).padStart(2, '0') +
+        ':' +
+        String(now.getSeconds()).padStart(2, '0');
 
-    await marcasModel.createMarca({
+    const resultado = await marcasModel.registrarMarcaTransaccional({
         usuario_id: usuarioId,
         fecha,
         hora,
-        tipo,
         ip,
         dispositivo_id: dispositivo.id
     });
 
-    return tipo;
+    return resultado.tipo;
 };
 
 export const obtenerReporte = async (filtros) => {
