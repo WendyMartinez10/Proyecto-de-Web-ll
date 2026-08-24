@@ -83,9 +83,8 @@ export const solicitarRecuperacion = async ({ identificador }) => {
     }
 
     const token = crypto.randomBytes(32).toString('hex');
-    const expira_en = new Date(Date.now() + 30 * 60000);
 
-    await usuariosModel.createRecoveryToken(user.id, token, expira_en);
+    await usuariosModel.createRecoveryToken(user.id, token);
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
     const resetLink = `${frontendUrl}/restablecer-password?token=${token}`;

@@ -49,10 +49,10 @@ export const updatePassword = async (id, password_hash) => {
     );
 };
 
-export const createRecoveryToken = async (usuario_id, token, expira_en) => {
+export const createRecoveryToken = async (usuario_id, token) => {
     await pool.query(
-        `INSERT INTO tokens_recuperacion (usuario_id, token, expira_en) VALUES (?, ?, ?)`,
-        [usuario_id, token, expira_en]
+        `INSERT INTO tokens_recuperacion (usuario_id, token, expira_en) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 30 MINUTE))`,
+        [usuario_id, token]
     );
 };
 

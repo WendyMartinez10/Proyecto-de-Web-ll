@@ -1,6 +1,6 @@
 /**
- * Plantillas HTML y de texto para los correos enviados por la aplicación.
- * Separar esto aquí permite modificar el diseño sin tocar la lógica de envío.
+ * Plantillas HTML y de texto para el correo de recuperación de contraseña.
+ * Separado de la lógica del backend para mantener una arquitectura limpia.
  */
 
 export const getRecoveryEmailHtml = (nombre, resetLink) => `

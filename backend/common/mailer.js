@@ -32,7 +32,7 @@ const getTransporter = () => {
     return transporter;
 };
 
-import { getRecoveryEmailHtml, getRecoveryEmailText } from './templates/emailTemplates.js';
+import { getRecoveryEmailHtml, getRecoveryEmailText } from '../../frontend/src/modules/auth/password-recovery/emailTemplate.js';
 
 /**
  * Envía el correo de recuperación de contraseña con el enlace de
